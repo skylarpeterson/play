@@ -7,7 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SongTableView.h"
+#import "SongTableViewDelegate.h"
+#import "SongTableViewCellDelegate.h"
+#import "PlaylistItem.h"
 
-@interface PlayViewController : UIViewController
+@interface PlayViewController : UIViewController <SongTableViewCellDelegate, SongTableViewDelegate, SongTableViewDataSource, UIGestureRecognizerDelegate>
+
+@property (weak, nonatomic) IBOutlet SongTableView *tableView;
+@property (nonatomic)PlaylistItem *playlistItem;
+@property (nonatomic)BOOL allSongs;
+@property (nonatomic)BOOL isAlbum;
+@property (nonatomic)NSString *albumArtist;
 
 @end

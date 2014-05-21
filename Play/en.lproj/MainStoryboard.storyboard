@@ -1,21 +1,178 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="2519" systemVersion="12A206j" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="2">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4488.2" systemVersion="13A558" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="8oU-H9-oxq">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1856"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3715.3"/>
     </dependencies>
     <scenes>
-        <!--class Prefix:identifier View Controller-->
-        <scene sceneID="5">
+        <!--Menu View Controller-->
+        <scene sceneID="XcE-pg-PB0">
             <objects>
-                <viewController id="2" customClass="PlayViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="3">
-                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                <viewController id="7tf-KY-tAy" customClass="MenuViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="JGb-lI-N6o"/>
+                        <viewControllerLayoutGuide type="bottom" id="rrF-gm-sr0"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="zml-Ax-YLo">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
+                    <navigationItem key="navigationItem" id="cML-at-Gn6"/>
+                    <connections>
+                        <segue destination="pjf-1B-W8M" kind="push" identifier="ShowSelection" id="Kls-sh-7G7"/>
+                        <segue destination="2" kind="push" identifier="ShowAllSongs" id="ssD-xo-Ag1"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="v8J-nS-aWs" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1229" y="113"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="TCE-iF-h3i">
+            <objects>
+                <navigationController definesPresentationContext="YES" navigationBarHidden="YES" id="8oU-H9-oxq" sceneMemberID="viewController">
+                    <extendedEdge key="edgesForExtendedLayout"/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="YBY-ad-2kU">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="7tf-KY-tAy" kind="relationship" relationship="rootViewController" id="CoK-af-Zem"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="t08-X8-kgm" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1674" y="107"/>
+        </scene>
+        <!--Selection View Controller-->
+        <scene sceneID="01F-GE-Gx3">
+            <objects>
+                <viewController id="pjf-1B-W8M" customClass="SelectionViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="tz6-PE-MYp"/>
+                        <viewControllerLayoutGuide type="bottom" id="u5m-xn-pio"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="wXr-Dr-ziL">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="grk-PY-JBa" customClass="SongTableView">
+                                <rect key="frame" x="0.0" y="20" width="320" height="528"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="grk-PY-JBa" firstAttribute="leading" secondItem="wXr-Dr-ziL" secondAttribute="leading" id="Ddl-Q7-8zc"/>
+                            <constraint firstItem="grk-PY-JBa" firstAttribute="trailing" secondItem="wXr-Dr-ziL" secondAttribute="trailing" id="NbX-Zp-xD0"/>
+                            <constraint firstItem="grk-PY-JBa" firstAttribute="top" secondItem="wXr-Dr-ziL" secondAttribute="top" id="VJH-yy-0cE"/>
+                            <constraint firstItem="grk-PY-JBa" firstAttribute="bottom" secondItem="wXr-Dr-ziL" secondAttribute="bottom" id="nSh-nG-Zs6"/>
+                        </constraints>
+                    </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
+                    <navigationItem key="navigationItem" id="zBx-6K-uPJ"/>
+                    <connections>
+                        <outlet property="tableView" destination="grk-PY-JBa" id="F27-iA-aDy"/>
+                        <segue destination="2" kind="push" identifier="ShowSongs" id="guq-zb-4E5"/>
+                        <segue destination="woP-PF-6dF" kind="push" identifier="ShowAlbums" id="ose-dP-taO"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="oiO-Yg-xA6" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-769" y="-301"/>
+        </scene>
+        <!--Album View Controller-->
+        <scene sceneID="hZx-fv-wz5">
+            <objects>
+                <viewController id="woP-PF-6dF" customClass="AlbumViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="swH-P2-qqE"/>
+                        <viewControllerLayoutGuide type="bottom" id="lWN-jL-tWO"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="aZc-av-FNt">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pK3-hS-mQ9" customClass="SongTableView">
+                                <rect key="frame" x="0.0" y="20" width="320" height="528"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="pK3-hS-mQ9" firstAttribute="bottom" secondItem="aZc-av-FNt" secondAttribute="bottom" id="Oie-rb-iXo"/>
+                            <constraint firstItem="pK3-hS-mQ9" firstAttribute="leading" secondItem="aZc-av-FNt" secondAttribute="leading" id="W8e-rF-WPY"/>
+                            <constraint firstItem="pK3-hS-mQ9" firstAttribute="top" secondItem="aZc-av-FNt" secondAttribute="top" id="npy-O7-4mk"/>
+                            <constraint firstItem="pK3-hS-mQ9" firstAttribute="trailing" secondItem="aZc-av-FNt" secondAttribute="trailing" id="txB-NC-uHY"/>
+                        </constraints>
+                    </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
+                    <navigationItem key="navigationItem" id="XGt-LR-c1b"/>
+                    <connections>
+                        <outlet property="tableView" destination="pK3-hS-mQ9" id="nBT-Ic-2Jh"/>
+                        <segue destination="6t4-Ko-Mz9" kind="push" identifier="PlaySong" id="JyC-tP-hGO"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="WbR-eY-joI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-293" y="-559"/>
+        </scene>
+        <!--Play View Controller-->
+        <scene sceneID="5">
+            <objects>
+                <viewController id="2" customClass="PlayViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="brx-Wr-IQw"/>
+                        <viewControllerLayoutGuide type="bottom" id="tUo-GJ-3Qa"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="3">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CpO-2J-vkc" customClass="SongTableView">
+                                <rect key="frame" x="0.0" y="20" width="320" height="528"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="CpO-2J-vkc" firstAttribute="top" secondItem="3" secondAttribute="top" id="AAk-M3-Y04"/>
+                            <constraint firstItem="CpO-2J-vkc" firstAttribute="trailing" secondItem="3" secondAttribute="trailing" id="PGm-Yz-ZoK"/>
+                            <constraint firstItem="CpO-2J-vkc" firstAttribute="leading" secondItem="3" secondAttribute="leading" id="Zro-q2-coD"/>
+                            <constraint firstItem="CpO-2J-vkc" firstAttribute="bottom" secondItem="3" secondAttribute="bottom" id="w0D-tP-LUw"/>
+                        </constraints>
+                    </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
+                    <navigationItem key="navigationItem" id="KM8-p0-TYZ"/>
+                    <connections>
+                        <outlet property="tableView" destination="CpO-2J-vkc" id="GSV-PG-Gr1"/>
+                        <segue destination="6t4-Ko-Mz9" kind="push" identifier="PlaySong" id="RR8-fi-TLJ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="-293" y="164"/>
+        </scene>
+        <!--Song View Controller-->
+        <scene sceneID="ebL-30-tIh">
+            <objects>
+                <viewController id="6t4-Ko-Mz9" customClass="SongViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="2Ye-Gt-JOX"/>
+                        <viewControllerLayoutGuide type="bottom" id="7CL-C7-ZCC"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="tUb-Sf-Pav">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
+                    <navigationItem key="navigationItem" id="UwU-8D-zD7"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="SzB-DN-6Rq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="317" y="-239"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
@@ -23,4 +180,8 @@
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
+    <inferredMetricsTieBreakers>
+        <segue reference="ssD-xo-Ag1"/>
+        <segue reference="RR8-fi-TLJ"/>
+    </inferredMetricsTieBreakers>
 </document>

@@ -1,69 +1,38 @@
 //
-//  PlayViewController.m
+//  AlbumViewController.m
 //  Play
 //
-//  Created by Skylar Peterson on 3/21/13.
+//  Created by Skylar Peterson on 3/31/13.
 //  Copyright (c) 2013 Play. All rights reserved.
 //
 
-#import "PlayViewController.h"
-#import "SongItem.h"
+#import "AlbumViewController.h"
 #import "SongTableViewCell.h"
+#import "SongItem.h"
 #import "SongViewController.h"
+#import "UIImage+StackBlur.h"
 #import <MediaPlayer/MediaPlayer.h>
+#import <QuartzCore/QuartzCore.h>
 
-@interface PlayViewController ()
+@interface AlbumViewController () {
+    NSMutableArray *_songItems;
+    int _rowSelected;
+    CALayer *_infoLayer;
+}
 
 @end
 
-@implementation PlayViewController {
-    NSMutableArray* _songItems;
-    int _rowSelected;
+@implementation AlbumViewController {
     UILabel *_backLabel;
     CGPoint _originalCenter;
 }
 
+const float IMAGE_EDGE = 195.0f;
+const float SEPARATOR = 2.5f;
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    //self.tableView.backgroundColor = [UIColor colorWithRed:220.0f/255.0f green:220.0f/255.0f blue:220.0f/255.0f alpha:1.0];
-    [self.tableView registerClassForCells:[SongTableViewCell class]];
-    
-    _songItems = [[NSMutableArray alloc] init];
-    if(self.isAlbum){
-        MPMediaPropertyPredicate *albumPredicate = [MPMediaPropertyPredicate predicateWithValue:self.playlistItem.title forProperty:MPMediaItemPropertyAlbumTitle];
-        MPMediaPropertyPredicate *artistPredicate = [MPMediaPropertyPredicate predicateWithValue:self.albumArtist forProperty:MPMediaItemPropertyArtist];
-        NSSet *predicates = [[NSSet alloc] initWithObjects:albumPredicate, artistPredicate, nil];
-        MPMediaQuery *albumQuery = [[MPMediaQuery alloc] initWithFilterPredicates:predicates];
-        NSArray *songs = [albumQuery items];
-        for(MPMediaItem *song in songs){
-            [_songItems addObject:song];
-        }
-    } else if (self.allSongs) {
-        MPMediaQuery *allSongsQuery = [MPMediaQuery songsQuery];
-        [allSongsQuery setGroupingType:MPMediaGroupingTitle];
-        NSArray *songs = [allSongsQuery items];
-        for(MPMediaItem *song in songs) {
-            [_songItems addObject:song];
-        }
-    } else {
-        NSString *playlistName = self.playlistItem.title;
-        MPMediaPropertyPredicate *playlistPredicate = [MPMediaPropertyPredicate predicateWithValue:playlistName
-                                                                                       forProperty:MPMediaPlaylistPropertyName];
-        NSSet *predicatesSet = [NSSet setWithObjects:playlistPredicate, nil];
-        MPMediaQuery *playlistQuery = [[MPMediaQuery alloc] initWithFilterPredicates:predicatesSet];
-        [playlistQuery setGroupingType:MPMediaGroupingPlaylist];
-        NSArray *playlists = [playlistQuery collections];
-        for(MPMediaPlaylist *playlist in playlists){
-            NSArray *songs = [playlist items];
-            for(MPMediaItem *song in songs) {
-                [_songItems addObject:song];
-            }
-        }
-    }
     
     _backLabel = [[UILabel alloc] init];
     _backLabel.text = @"pull to go back";
@@ -77,38 +46,53 @@
     UIGestureRecognizer* recognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePull:)];
     recognizer.delegate = self;
     [self.view addGestureRecognizer:recognizer];
+    
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    [self.tableView registerClassForCells:[SongTableViewCell class]];
+    
+    _songItems = [[NSMutableArray alloc] init];
+    
+    MPMediaPropertyPredicate *albumPredicate = [MPMediaPropertyPredicate predicateWithValue:self.album forProperty:MPMediaItemPropertyAlbumTitle];
+    NSSet *predicates = [[NSSet alloc] initWithObjects:albumPredicate, nil];
+    MPMediaQuery *albumQuery = [[MPMediaQuery alloc] initWithFilterPredicates:predicates];
+    NSArray *songs = [albumQuery items];
+    for(MPMediaItem *song in songs){
+        [_songItems addObject:song];
+    }
+    MPMediaItemArtwork *artwork = [songs[0] valueForProperty: MPMediaItemPropertyArtwork];
+    UIImage *artworkImage = [artwork imageWithSize:CGSizeMake(300, 300)];
+    UIImageView *imageView;
+    if(artworkImage) {
+        imageView = [[UIImageView alloc] initWithImage:[artworkImage stackBlur:20]];
+    } else {
+        imageView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"NoArtwork.png"] stackBlur:20]];
+    }
+    imageView.contentMode = UIViewContentModeScaleAspectFit;
+    imageView.frame = CGRectMake(0, 25, self.view.bounds.size.width, self.view.bounds.size.width);
+    [self.view insertSubview:imageView belowSubview:self.tableView];
+    
+    CALayer *infoLayer = [CALayer layer];
+    infoLayer.backgroundColor = [[UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:0.60] CGColor];
+    infoLayer.frame = CGRectMake(0, 25, self.view.bounds.size.width, self.view.bounds.size.width);
+    [self.view.layer insertSublayer:infoLayer below:self.tableView.layer];
 }
 
-#pragma mark - SongTableViewDataSource methods
--(NSInteger)numberOfRows{
+#pragma mark - UISongTableViewDataSource methods
+- (NSInteger)numberOfRows {
     return _songItems.count;
 }
 
--(UITableViewCell*)cellForRow:(NSInteger)row {
+- (UITableViewCell*)cellForRow:(NSInteger)row {
     SongTableViewCell *cell = (SongTableViewCell*)[self.tableView dequeueReusableCell];
     cell.textLabel.backgroundColor = [UIColor clearColor];
-    cell.detailTextLabel.backgroundColor = [UIColor clearColor];
     MPMediaItem *song = _songItems[row];
-    MPMediaItemArtwork *artwork = [song valueForProperty: MPMediaItemPropertyArtwork];
-    UIImage *artworkImage = [artwork imageWithSize:CGSizeMake(300, 300)];
-    SongItem *item;
-    if(artworkImage){
-        item = [[SongItem alloc] initWithTitle:[song valueForProperty:MPMediaItemPropertyTitle] Artist:[song valueForProperty:MPMediaItemPropertyArtist] Artwork:artworkImage Row:row];
-    } else {
-        item = [[SongItem alloc] initWithTitle:[song valueForProperty:MPMediaItemPropertyTitle] Artist:[song valueForProperty:MPMediaItemPropertyArtist] Artwork:[UIImage imageNamed:@"NoArtwork.png"] Row:row];
-    }
+    SongItem *item = [[SongItem alloc] initWithTitle:[song valueForProperty:MPMediaItemPropertyTitle] Artist:[song valueForProperty:MPMediaItemPropertyArtist] Artwork:NULL Row:row];
     cell.textLabel.text = item.title;
     cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0];
-    cell.detailTextLabel.text = item.artist;
-    cell.detailTextLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:16.0];
-    cell.imageView.image = item.artwork;
-    cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
     cell.songItem = item;
     cell.delegate = self;
-    if(item.completed == YES){
-        cell.textLabel.textColor = [UIColor whiteColor];
-        cell.detailTextLabel.textColor = [UIColor whiteColor];
-    } 
+    //cell.textLabel.textColor = [UIColor colorWithRed:105.0f/255.0f green:105.0f/255.0f blue:105.0f/255.0f alpha:1.0];
     return cell;
 }
 
